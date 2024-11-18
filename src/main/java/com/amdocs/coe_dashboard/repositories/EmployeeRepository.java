@@ -1,12 +1,12 @@
 package com.amdocs.coe_dashboard.repositories;
 
 import com.amdocs.coe_dashboard.models.Employee;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface EmployeeRepository {
-
-
 
     boolean employeeLogin(String email, String passwd);
 
