@@ -1,13 +1,14 @@
-package com.amdocs.coe_dashboard.authentication;
+package com.amdocs.coe_dashboard;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-@Component
+@Service
 public class JwtUtil {
 
     private String secretKey = "aabesd-adasdfe-outhem";  // Use a strong secret key in real apps!

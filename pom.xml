@@ -8,6 +8,19 @@
 		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<repositories>
+		<!-- Define a custom repository -->
+		<repository>
+			<id>my-custom-repo</id>
+			<url>https://mvnrepository.com/</url> <!-- Replace with your repository URL -->
+		</repository>
+
+		<!-- You can also add Maven Central or any other repository -->
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
 	<groupId>com.amdocs</groupId>
 	<artifactId>coe-dashboard</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -58,6 +71,18 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-security</artifactId>-->
+<!--		</dependency>-->
+
+		<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.2.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

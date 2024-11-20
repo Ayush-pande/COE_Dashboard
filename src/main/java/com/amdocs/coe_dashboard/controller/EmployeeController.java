@@ -1,10 +1,10 @@
 package com.amdocs.coe_dashboard.controller;
 
 
+import com.amdocs.coe_dashboard.JwtUtil;
 import com.amdocs.coe_dashboard.models.Employee;
 import com.amdocs.coe_dashboard.services.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +20,20 @@ public class EmployeeController {
 
     @Autowired
     EmployeeService employeeService;
+    @Autowired
+    JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> employeeLogin(@RequestBody Employee employee) {
+    public ResponseEntity<String> employeeLogin(@RequestBody Employee employee) {
         try {
-            Boolean loginSuccessful = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPasswd());
-            return new ResponseEntity<>(loginSuccessful, HttpStatus.ACCEPTED);
+
+            if(employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPasswd()))
+                return new ResponseEntity<>(jwtUtil.generateToken(employee.getEmpId()), HttpStatus.OK);
+            else
+                return new ResponseEntity<>("Invalid",HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
         }
     }
 
