@@ -45,10 +45,7 @@ public class AdminRepositoryImpl implements AdminRepository {
     @Override
     public List<Employee> findByIdOrName(String input) {
         String statement = "SELECT * FROM `"
-                + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` "
-                + "WHERE LOWER(empId) LIKE '%' || LOWER($1) || '%' "
-                + "OR LOWER(empName) LIKE '%' || LOWER($1) || '%'";
-
+                + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` WHERE empId LIKE '%' || $1 || '%' OR empName LIKE '%' || $1 || '%'";
         List<Employee> result = new ArrayList<>();
         cluster
                 .query(statement,
