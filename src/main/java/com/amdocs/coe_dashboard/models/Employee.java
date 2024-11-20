@@ -1,6 +1,8 @@
 package com.amdocs.coe_dashboard.models;
 
 public class Employee {
+    private String empEmail;
+    private String empPasswd;
     private String empId;
     private String empName; // Name of the employee
     private String supervisorName; // Supervisor's name in account
@@ -21,7 +23,12 @@ public class Employee {
     private String hobbiesSports; // Hobbies or sports
     private String additionalInfo; // Anything else you want to mention
 
-    public Employee(String empId, String empName, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, String functionalKnowledge, String primaryTechSkill, String primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo) {
+    public Employee() {
+    }
+
+    public Employee(String empEmail, String empPasswd, String empId, String empName, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, String functionalKnowledge, String primaryTechSkill, String primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo) {
+        this.empEmail = empEmail;
+        this.empPasswd = empPasswd;
         this.empId = empId;
         this.empName = empName;
         this.supervisorName = supervisorName;
@@ -41,6 +48,22 @@ public class Employee {
         this.presentationSkills = presentationSkills;
         this.hobbiesSports = hobbiesSports;
         this.additionalInfo = additionalInfo;
+    }
+
+    public String getEmpEmail() {
+        return empEmail;
+    }
+
+    public void setEmpEmail(String empEmail) {
+        this.empEmail = empEmail;
+    }
+
+    public String getEmpPasswd() {
+        return empPasswd;
+    }
+
+    public void setEmpPasswd(String empPasswd) {
+        this.empPasswd = empPasswd;
     }
 
     public String getEmpId() {
