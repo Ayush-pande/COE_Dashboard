@@ -1,6 +1,9 @@
 package com.amdocs.coe_dashboard.repositories;
 
+import com.amdocs.coe_dashboard.config.CouchbaseConfig;
 import com.amdocs.coe_dashboard.models.Employee;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryResult;
@@ -9,6 +12,18 @@ import com.couchbase.client.java.query.QueryScanConsistency;
 import java.util.List;
 
 public class AdminRepositoryImpl implements AdminRepository {
+
+    private final Cluster cluster;
+    private final Collection adminCol;
+    private final CouchbaseConfig couchbaseConfig;
+
+
+    public AdminRepositoryImpl(Cluster cluster, Collection adminCol, CouchbaseConfig couchbaseConfig) {
+        this.cluster = cluster;
+        this.adminCol = adminCol;
+        this.couchbaseConfig = couchbaseConfig;
+    }
+
 
     @Override
     public boolean adminLogin(String email, String passwd) {
@@ -19,9 +34,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                         QueryOptions.queryOptions().parameters(JsonArray.from(email, passwd))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS));
 
-        boolean b = !result.rows().isEmpty();
-        return b;
-
+        return !result.rows().isEmpty();
     }
 
     @Override
@@ -38,19 +51,19 @@ public class AdminRepositoryImpl implements AdminRepository {
 
     @Override
     public Employee addEmp(String id, Employee employee) {
-        employeeCol.insert(id, employee);
+        adminCol.insert(id, employee);
         return employee;
     }
 
     @Override
     public Employee update(String id, Employee employee) {
-        employeeCol.replace(id, employee);
+        adminCol.replace(id, employee);
         return employee;
     }
 
     @Override
     public Employee getEmpById(String id)
     {
-        return employeeCol.get(id).contentAs(Employee.class);
+        return adminCol.get(id).contentAs(Employee.class);
     }
 }

@@ -9,9 +9,6 @@ public interface AdminRepository {
 
     List<Employee> findByIdOrName(String name);
 
-
-
-
     Employee addEmp(String id, Employee employee);
 
     Employee update(String id, Employee employee);

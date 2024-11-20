@@ -60,8 +60,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
     }
 
     @Override
-    public Employee getEmpById(String id)
-    {
+    public Employee getEmpById(String id) {
          return employeeCol.get(id).contentAs(Employee.class);
     }
 }
