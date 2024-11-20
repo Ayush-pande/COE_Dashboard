@@ -23,14 +23,15 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> employeeLogin(@RequestBody Employee employee) {
+    public ResponseEntity<Employee> employeeLogin(@RequestBody Employee employee) {
         try {
-            if(employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPasswd()))
-                return new ResponseEntity<>("true", HttpStatus.OK);
-            return new ResponseEntity<>("false", HttpStatus.UNAUTHORIZED);
+            List<Employee> ls = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPasswd());
+            if(!ls.isEmpty())
+                return new ResponseEntity<>(ls.get(0), HttpStatus.OK);
+            return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return new ResponseEntity<>("invalid", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
         }
     }
 

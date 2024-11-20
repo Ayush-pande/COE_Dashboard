@@ -31,14 +31,17 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
 
     @Override
-    public boolean employeeLogin(String email, String passwd) {
+    public List<Employee> employeeLogin(String email, String passwd) {
         String statement = "SELECT * FROM `"
                 + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` WHERE empEmail = $1 AND empPasswd = $2";
-        return !cluster
+        List<Employee> result = new ArrayList<>();
+        cluster
                 .query(statement,
                         QueryOptions.queryOptions().parameters(JsonArray.from(email, passwd))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
-                .rowsAs(EmployeeWrapper.class).isEmpty();
+                .rowsAs(EmployeeWrapper.class).forEach(e->result.add(e.getEmployee()));
+
+        return result;
     }
 
     @Override

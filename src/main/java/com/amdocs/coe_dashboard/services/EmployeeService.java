@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    boolean employeeLogin(String email, String passwd);
+    List<Employee> employeeLogin(String email, String passwd);
 
     Employee registerEmployee(String id, Employee employee);
 

@@ -8,7 +8,7 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository {
 
-    boolean employeeLogin(String email, String passwd);
+    List<Employee> employeeLogin(String email, String passwd);
 
     List<Employee> findByIdOrName(String name);
 
