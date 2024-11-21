@@ -29,7 +29,6 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
         this.couchbaseConfig = couchbaseConfig;
     }
 
-
     @Override
     public boolean employeeLogin(String email, String passwd) {
         String statement = "SELECT * FROM `"
