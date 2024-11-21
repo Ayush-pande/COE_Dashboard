@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository{
@@ -31,7 +32,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
 
     @Override
-    public List<Employee> employeeLogin(String email, String passwd) {
+    public Optional<Employee> employeeLogin(String email, String passwd) {
         String statement = "SELECT * FROM `"
                 + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` WHERE empEmail = $1 AND empPasswd = $2";
         List<Employee> result = new ArrayList<>();
@@ -39,16 +40,19 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                 .query(statement,
                         QueryOptions.queryOptions().parameters(JsonArray.from(email, passwd))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
-                .rowsAs(EmployeeWrapper.class).forEach(e->result.add(e.getEmployee()));
+                .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
 
-        return result;
+        // Return the first employee found or empty if no employee is found
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
+
 
     @Override
     public List<Employee> findByIdOrName(String input) {
         String statement = "SELECT * FROM `"
                 + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` "
                 + "WHERE LOWER(empId) LIKE '%' || LOWER($1) || '%' "
+                + "OR LOWER(empEmail) LIKE '%' || LOWER($1) || '%' "
                 + "OR LOWER(empName) LIKE '%' || LOWER($1) || '%'";
 
         List<Employee> result = new ArrayList<>();

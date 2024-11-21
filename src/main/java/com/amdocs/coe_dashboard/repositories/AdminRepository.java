@@ -1,12 +1,14 @@
 package com.amdocs.coe_dashboard.repositories;
 
+import com.amdocs.coe_dashboard.models.Admin;
 import com.amdocs.coe_dashboard.models.Employee;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AdminRepository {
-    boolean adminLogin(String email, String passwd);
+    Optional<Admin> adminLogin(String email, String passwd);
 
     List<Employee> findByIdOrName(String input);
 

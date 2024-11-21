@@ -1,8 +1,11 @@
 package com.amdocs.coe_dashboard.controller;
 
+import com.amdocs.coe_dashboard.authentication.Authentication;
 import com.amdocs.coe_dashboard.models.Admin;
 import com.amdocs.coe_dashboard.models.Employee;
+import com.amdocs.coe_dashboard.models.LoginResponse;
 import com.amdocs.coe_dashboard.services.AdminService;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,9 +37,16 @@ public class AdminController {
     @PostMapping("/login")
     public ResponseEntity<String> adminLogin(@RequestBody Admin admin) {
         try {
-            if(adminService.adminLogin(admin.getAdminEmail(), admin.getAdminPassword()))
-                return new ResponseEntity<>("true", HttpStatus.OK);
-            return new ResponseEntity<>("false", HttpStatus.UNAUTHORIZED);
+            String token = adminService.adminLogin(admin.getAdminEmail(), admin.getAdminPassword());
+
+//            List<Admin> adminOpt = adminService.getEmployeeDetails()
+            if(token.isEmpty())
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(token);
+
+            return ResponseEntity.status(HttpStatus.OK).body(token);
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>("invalid", HttpStatus.BAD_REQUEST);
@@ -44,32 +54,44 @@ public class AdminController {
     }
 
     @GetMapping("/getEmp/{input}")
-    public ResponseEntity<List<Employee>> getEmployeeDetails(@PathVariable String input) {
+    public ResponseEntity<List<Employee>> getEmployeeDetails(@RequestHeader(value = "Authorization") String token, @PathVariable String input) {
         try {
+            new Authentication().validateJwtToken(token);
             List<Employee> emp = adminService.getEmployeeDetails(input);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
-        } catch (Exception ex) {
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+        }  catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<Employee> getEmployeeDetailsById(@PathVariable String id) {
+    public ResponseEntity<Employee> getEmployeeDetailsById(@RequestHeader(value = "Authorization") String token, @PathVariable String id) {
         try {
+            new Authentication().validateJwtToken(token);
             Employee emp = adminService.getEmployeeDetailsById(id);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
-        } catch (Exception ex) {
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
+        }  catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee){
+    public ResponseEntity<Employee> addEmployee(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee){
         try {
+            new Authentication().validateJwtToken(token);
             Employee emp = adminService.addEmployee(employee.getEmpId(), employee);
             return new ResponseEntity<>(emp, HttpStatus.CREATED);
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
@@ -77,10 +99,14 @@ public class AdminController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Employee> updateEmployeeDetails(@RequestBody Employee employee){
+    public ResponseEntity<Employee> updateEmployeeDetails(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee){
         try {
+            new Authentication().validateJwtToken(token);
             Employee emp = adminService.updateEmployeeDetails(employee.getEmpId(),employee);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);

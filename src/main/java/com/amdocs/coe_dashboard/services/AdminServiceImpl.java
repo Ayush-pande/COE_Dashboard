@@ -1,11 +1,14 @@
 package com.amdocs.coe_dashboard.services;
 
+import com.amdocs.coe_dashboard.authentication.Authentication;
+import com.amdocs.coe_dashboard.models.Admin;
 import com.amdocs.coe_dashboard.models.Employee;
 import com.amdocs.coe_dashboard.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -14,8 +17,13 @@ public class AdminServiceImpl implements AdminService{
     AdminRepository adminRepository;
 
     @Override
-    public boolean adminLogin(String email, String passwd) {
-        return adminRepository.adminLogin(email, passwd);
+    public String adminLogin(String email, String passwd) {
+        Optional<Admin> adminOpt = adminRepository.adminLogin(email, passwd);
+
+        if(adminOpt.isEmpty())
+            return "";
+
+        return new Authentication().generateJwtToken(adminOpt.get().getAdminEmail());
     }
 
     @Override

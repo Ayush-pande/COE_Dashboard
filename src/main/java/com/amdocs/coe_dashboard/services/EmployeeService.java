@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    List<Employee> employeeLogin(String email, String passwd);
+    String employeeLogin(String email, String passwd);
 
     Employee registerEmployee(String id, Employee employee);
 

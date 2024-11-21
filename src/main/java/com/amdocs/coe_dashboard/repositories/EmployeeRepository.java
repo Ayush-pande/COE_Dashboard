@@ -4,11 +4,12 @@ import com.amdocs.coe_dashboard.models.Employee;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository {
 
-    List<Employee> employeeLogin(String email, String passwd);
+    Optional<Employee> employeeLogin(String email, String passwd);
 
     List<Employee> findByIdOrName(String name);
 

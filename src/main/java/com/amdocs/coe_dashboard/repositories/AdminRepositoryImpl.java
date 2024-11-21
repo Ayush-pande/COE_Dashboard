@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AdminRepositoryImpl implements AdminRepository {
@@ -30,15 +31,17 @@ public class AdminRepositoryImpl implements AdminRepository {
         this.couchbaseConfig = couchbaseConfig;
     }
     @Override
-    public boolean adminLogin(String email, String passwd) {
+    public Optional<Admin> adminLogin(String email, String passwd) {
         String statement = "SELECT * FROM `"
                 + couchbaseConfig.getBucketName() + "`.`dashboard`.`admin` WHERE adminEmail = $1 AND adminPassword = $2";
-        QueryResult result =cluster
+        List<Admin> result = new ArrayList<>();
+        cluster
                 .query(statement,
                         QueryOptions.queryOptions().parameters(JsonArray.from(email, passwd))
-                                .scanConsistency(QueryScanConsistency.REQUEST_PLUS));
-        System.out.println(result.rowsAs(AdminWrapper.class));
-        return !result.rowsAs(AdminWrapper.class).isEmpty();
+                                .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
+                .rowsAs(AdminWrapper.class).forEach(e->result.add(e.getAdmin()));
+//        System.out.println(result.rowsAs(AdminWrapper.class));
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
 
     }
 
@@ -47,6 +50,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         String statement = "SELECT * FROM `"
                 + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` "
                 + "WHERE LOWER(empId) LIKE '%' || LOWER($1) || '%' "
+                + "OR LOWER(empEmail) LIKE '%' || LOWER($1) || '%' "
                 + "OR LOWER(empName) LIKE '%' || LOWER($1) || '%'";
 
         List<Employee> result = new ArrayList<>();
