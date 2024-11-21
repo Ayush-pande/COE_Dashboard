@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/employee")
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class EmployeeController {
 
@@ -22,13 +23,15 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> employeeLogin(@RequestBody Employee employee) {
+    public ResponseEntity<Employee> employeeLogin(@RequestBody Employee employee) {
         try {
-            Boolean loginSuccessful = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPasswd());
-            return new ResponseEntity<>(loginSuccessful, HttpStatus.ACCEPTED);
+            List<Employee> ls = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPasswd());
+            if(!ls.isEmpty())
+                return new ResponseEntity<>(ls.get(0), HttpStatus.OK);
+            return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
         }
     }
 

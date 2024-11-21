@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/v1/admin")
 @Slf4j
 public class AdminController {
@@ -31,13 +32,14 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> adminLogin(@RequestBody Admin admin) {
+    public ResponseEntity<String> adminLogin(@RequestBody Admin admin) {
         try {
-            Boolean loginSuccess = adminService.adminLogin(admin.getAdminEmail(), admin.getAdminPassword());
-            return new ResponseEntity<>(loginSuccess, HttpStatus.OK);
+            if(adminService.adminLogin(admin.getAdminEmail(), admin.getAdminPassword()))
+                return new ResponseEntity<>("true", HttpStatus.OK);
+            return new ResponseEntity<>("false", HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("invalid", HttpStatus.BAD_REQUEST);
         }
     }
 

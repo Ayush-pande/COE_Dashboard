@@ -15,7 +15,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     public EmployeeRepository employeeRepository;
 
     @Override
-    public boolean employeeLogin(String email, String passwd) {
+    public List<Employee> employeeLogin(String email, String passwd) {
         return employeeRepository.employeeLogin(email, passwd);
     }
 
