@@ -17,5 +17,5 @@ public interface AdminRepository {
     Employee update(String id, Employee employee);
 
     Employee getEmpById(String id);
-
+    List<Employee> getAllEmp();
 }

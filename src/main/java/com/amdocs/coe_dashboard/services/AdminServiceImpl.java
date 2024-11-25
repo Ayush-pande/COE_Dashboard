@@ -4,6 +4,7 @@ import com.amdocs.coe_dashboard.authentication.Authentication;
 import com.amdocs.coe_dashboard.models.Admin;
 import com.amdocs.coe_dashboard.models.Employee;
 import com.amdocs.coe_dashboard.repositories.AdminRepository;
+import com.amdocs.coe_dashboard.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,8 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Employee addEmployee(String id, Employee employee) {
         return adminRepository.addEmp(id, employee);
+    }
+    public List<Employee> getAllEmployees() {
+        return adminRepository.getAllEmp();
     }
 }

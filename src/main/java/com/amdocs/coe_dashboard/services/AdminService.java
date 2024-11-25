@@ -16,4 +16,5 @@ public interface AdminService {
     Employee getEmployeeDetailsById(String id);
 
     Employee addEmployee(String id, Employee employee);
+    List<Employee> getAllEmployees();
 }

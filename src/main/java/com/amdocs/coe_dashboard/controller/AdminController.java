@@ -1,6 +1,7 @@
 package com.amdocs.coe_dashboard.controller;
 
 import com.amdocs.coe_dashboard.authentication.Authentication;
+import com.amdocs.coe_dashboard.authentication.AuthenticationEmp;
 import com.amdocs.coe_dashboard.models.Admin;
 import com.amdocs.coe_dashboard.models.Employee;
 import com.amdocs.coe_dashboard.models.LoginResponse;
@@ -112,5 +113,22 @@ public class AdminController {
             return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/getAllEmp")
+    public ResponseEntity<List<Employee>> getAllEmployees(@RequestHeader(value = "Authorization") String token) {
+        try {
+            new Authentication().validateJwtToken(token);
+
+            List<Employee> emp = adminService.getAllEmployees();
+            return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
+        }  catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 }
