@@ -87,4 +87,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     public Employee updateEmployeeDetails(String employeeId, Employee updatedProfile) {
         return employeeRepository.update(employeeId, updatedProfile);
     }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.getAllEmp();
+    }
 }

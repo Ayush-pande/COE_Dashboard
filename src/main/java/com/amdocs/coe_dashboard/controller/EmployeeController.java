@@ -51,6 +51,7 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> getEmployeeDetails(@RequestHeader(value = "Authorization") String token, @PathVariable String input) {
         try {
             new AuthenticationEmp().validateJwtToken(token);
+
             List<Employee> emp = employeeService.getEmployeeDetails(input);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
         }  catch (JWTVerificationException e) {
@@ -61,6 +62,22 @@ public class EmployeeController {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/getAllEmp")
+    public ResponseEntity<List<Employee>> getAllEmployees(@RequestHeader(value = "Authorization") String token) {
+        try {
+            new AuthenticationEmp().validateJwtToken(token);
+
+            List<Employee> emp = employeeService.getAllEmployees();
+            return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
+        }  catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @GetMapping("/getById/{id}")
     public ResponseEntity<Employee> getEmployeeDetailsById(@RequestHeader(value = "Authorization") String token, @PathVariable String id) {

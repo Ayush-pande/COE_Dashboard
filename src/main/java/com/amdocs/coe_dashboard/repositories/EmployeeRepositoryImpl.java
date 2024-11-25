@@ -81,4 +81,18 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
     {
          return employeeCol.get(id).contentAs(Employee.class);
     }
+
+    @Override
+    public List<Employee> getAllEmp() {
+        String statement = "SELECT * FROM `"
+                + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` ";
+
+        List<Employee> result = new ArrayList<>();
+        cluster
+                .query(statement,
+                        QueryOptions.queryOptions()
+                                .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
+                .rowsAs(EmployeeWrapper.class).forEach(e->result.add(e.getEmployee()));
+        return result;
+    }
 }
