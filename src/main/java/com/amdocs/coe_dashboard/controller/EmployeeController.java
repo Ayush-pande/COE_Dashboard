@@ -97,7 +97,7 @@ public class EmployeeController {
     @PostMapping("/register")
     public ResponseEntity<Employee> registerEmployee(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee){
         try {
-            new AuthenticationEmp().validateJwtToken(token);
+//            new AuthenticationEmp().validateJwtToken(token);
             Employee emp = employeeService.registerEmployee(employee.getEmpId(), employee);
             return new ResponseEntity<>(emp, HttpStatus.CREATED);
         }  catch (JWTVerificationException e) {

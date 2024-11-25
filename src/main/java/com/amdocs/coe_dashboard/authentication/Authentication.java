@@ -12,7 +12,7 @@ import java.util.Date;
 public class Authentication {
 
     private final String SECRET_KEY = "admin_secret_key";  // Use a secure key here
-    private final long EXPIRATION_TIME = 600_000L; // 10 days in milliseconds
+    private final long EXPIRATION_TIME = 3_600_000L; // 10 days in milliseconds
 
     public Authentication() {
     }
