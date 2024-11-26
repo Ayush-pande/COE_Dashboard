@@ -95,7 +95,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Employee> registerEmployee(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee){
+    public ResponseEntity<Employee> registerEmployee( @RequestBody Employee employee){
         try {
 //            new AuthenticationEmp().validateJwtToken(token);
             Employee emp = employeeService.registerEmployee(employee.getEmpId(), employee);
