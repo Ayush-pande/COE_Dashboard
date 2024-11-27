@@ -95,17 +95,22 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Employee> registerEmployee( @RequestBody Employee employee){
+    public ResponseEntity<String> registerEmployee( @RequestBody Employee employee){
         try {
-//            new AuthenticationEmp().validateJwtToken(token);
-            Employee emp = employeeService.registerEmployee(employee.getEmpId(), employee);
-            return new ResponseEntity<>(emp, HttpStatus.CREATED);
+            employeeService.registerEmployee(employee.getEmpId(), employee);
+            String token = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPasswd());
+
+            if(token.isEmpty()){
+                //delete employee registered
+                return new ResponseEntity<>("", HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>(token, HttpStatus.CREATED);
         }  catch (JWTVerificationException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }  catch (Exception ex) {
             log.error(ex.getMessage());
-            return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
         }
     }
 
