@@ -93,4 +93,11 @@ public class AdminRepositoryImpl implements AdminRepository {
                 .rowsAs(EmployeeWrapper.class).forEach(e->result.add(e.getEmployee()));
         return result;
     }
+
+    @Override
+    public String delete(String id) {
+        employeeCol.remove(id);
+        return id;
+    }
+
 }

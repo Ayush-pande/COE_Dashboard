@@ -6,9 +6,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class AuthenticationEmp {
 
     private final String SECRET_KEY = "employee_secret_key";  // Use a secure key here

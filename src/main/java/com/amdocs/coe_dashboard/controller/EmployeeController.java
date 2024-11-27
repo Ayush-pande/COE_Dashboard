@@ -25,6 +25,8 @@ public class EmployeeController {
 
     @Autowired
     EmployeeService employeeService;
+    @Autowired
+    AuthenticationEmp authenticationEmp;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> employeeLogin(@RequestBody Employee employee) {
@@ -50,7 +52,7 @@ public class EmployeeController {
     @GetMapping("/getEmp/{input}")
     public ResponseEntity<List<Employee>> getEmployeeDetails(@RequestHeader(value = "Authorization") String token, @PathVariable String input) {
         try {
-            new AuthenticationEmp().validateJwtToken(token);
+            authenticationEmp.validateJwtToken(token);
 
             List<Employee> emp = employeeService.getEmployeeDetails(input);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
@@ -65,7 +67,7 @@ public class EmployeeController {
     @GetMapping("/getAllEmp")
     public ResponseEntity<List<Employee>> getAllEmployees(@RequestHeader(value = "Authorization") String token) {
         try {
-            new AuthenticationEmp().validateJwtToken(token);
+            authenticationEmp.validateJwtToken(token);
 
             List<Employee> emp = employeeService.getAllEmployees();
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
@@ -82,7 +84,7 @@ public class EmployeeController {
     @GetMapping("/getById/{id}")
     public ResponseEntity<Employee> getEmployeeDetailsById(@RequestHeader(value = "Authorization") String token, @PathVariable String id) {
         try {
-            new AuthenticationEmp().validateJwtToken(token);
+            authenticationEmp.validateJwtToken(token);
             Employee emp = employeeService.getEmployeeDetailsById(id);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
         }  catch (JWTVerificationException e) {
@@ -117,7 +119,7 @@ public class EmployeeController {
     @PutMapping("/update")
     public ResponseEntity<Employee> updateEmployeeDetails(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee){
         try {
-            new AuthenticationEmp().validateJwtToken(token);
+            authenticationEmp.validateJwtToken(token);
             Employee emp = employeeService.updateEmployeeDetails(employee.getEmpId(),employee);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
         }  catch (JWTVerificationException e) {

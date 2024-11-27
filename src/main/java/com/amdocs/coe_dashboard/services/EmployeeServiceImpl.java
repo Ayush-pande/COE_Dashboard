@@ -22,6 +22,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
     public EmployeeRepository employeeRepository;
+    @Autowired
+    AuthenticationEmp authenticationEmp;
 
 //
 //    private static final String SECRET_KEY = "your_secret_key";  // Use a secure key here
@@ -39,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService{
             return "";
 
         // Generate JWT Token
-        return new AuthenticationEmp().generateJwtToken(employeeOpt.get().getEmpEmail());
+        return authenticationEmp.generateJwtToken(employeeOpt.get().getEmpEmail());
     }
 //
 //    private String generateJwtToken(Employee employee) {

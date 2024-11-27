@@ -1,7 +1,6 @@
 package com.amdocs.coe_dashboard.services;
 
 import com.amdocs.coe_dashboard.models.Employee;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,5 +15,8 @@ public interface AdminService {
     Employee getEmployeeDetailsById(String id);
 
     Employee addEmployee(String id, Employee employee);
+
     List<Employee> getAllEmployees();
+
+    String deleteEmployee(String id);
 }

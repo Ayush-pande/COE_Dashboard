@@ -16,6 +16,8 @@ public class AdminServiceImpl implements AdminService{
 
     @Autowired
     AdminRepository adminRepository;
+    @Autowired
+    Authentication authentication;
 
     @Override
     public String adminLogin(String email, String passwd) {
@@ -24,7 +26,7 @@ public class AdminServiceImpl implements AdminService{
         if(adminOpt.isEmpty())
             return "";
 
-        return new Authentication().generateJwtToken(adminOpt.get().getAdminEmail());
+        return authentication.generateJwtToken(adminOpt.get().getAdminEmail());
     }
 
     @Override
@@ -46,7 +48,13 @@ public class AdminServiceImpl implements AdminService{
     public Employee addEmployee(String id, Employee employee) {
         return adminRepository.addEmp(id, employee);
     }
+
     public List<Employee> getAllEmployees() {
         return adminRepository.getAllEmp();
+    }
+
+    @Override
+    public String deleteEmployee(String id) {
+        return adminRepository.delete(id);
     }
 }
