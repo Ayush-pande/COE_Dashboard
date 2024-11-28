@@ -1,6 +1,5 @@
 package com.amdocs.coe_dashboard.repositories;
 
-//import org.couchbase.quickstart.springboot.configs.CouchbaseConfig;
 import com.amdocs.coe_dashboard.config.CouchbaseConfig;
 import com.amdocs.coe_dashboard.models.Employee;
 import com.amdocs.coe_dashboard.models.EmployeeWrapper;
@@ -32,13 +31,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
 
     @Override
-    public Optional<Employee> employeeLogin(String email, String passwd) {
+    public Optional<Employee> employeeLogin(String email, String password) {
         String statement = "SELECT * FROM `"
-                + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` WHERE empEmail = $1 AND empPasswd = $2";
+                + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` WHERE empEmail = $1 AND empPassword = $2";
         List<Employee> result = new ArrayList<>();
         cluster
                 .query(statement,
-                        QueryOptions.queryOptions().parameters(JsonArray.from(email, passwd))
+                        QueryOptions.queryOptions().parameters(JsonArray.from(email, password))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
 

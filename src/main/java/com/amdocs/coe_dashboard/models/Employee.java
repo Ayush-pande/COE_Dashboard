@@ -1,17 +1,19 @@
 package com.amdocs.coe_dashboard.models;
 
+import java.util.List;
+
 public class Employee {
     private String empEmail;
-    private String empPasswd;
+    private String empPassword;
     private String empId;
     private String empName; // Name of the employee
     private String supervisorName; // Supervisor's name in account
     private double amdocsExperience; // Amdocs Experience (years or months)
     private double totalExperience; // Total Experience (years or months)
     private String amdocsJourney; // Amdocs Journey (e.g., roles, growth)
-    private String functionalKnowledge; // Functional knowledge or domain expertise
-    private String primaryTechSkill; // Primary tech skill (e.g., Java, AWS)
-    private String primaryProductSubdomain; // Primary product or subdomain
+    private List<String> functionalKnowledge; // Functional knowledge or domain expertise
+    private List<String> primaryTechSkill; // Primary tech skill (e.g., Java, AWS)
+    private List<String> primaryProductSubdomain; // Primary product or subdomain
     private String secondaryTechSkill; // Secondary tech skill (e.g., Python, SQL)
     private String secondaryProduct; // Secondary product knowledge
     private String devOpsKnowledge; // DevOps knowledge (tools, CI/CD, etc.)
@@ -26,9 +28,9 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String empEmail, String empPasswd, String empId, String empName, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, String functionalKnowledge, String primaryTechSkill, String primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo) {
+    public Employee(String empEmail, String empPassword, String empId, String empName, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo) {
         this.empEmail = empEmail;
-        this.empPasswd = empPasswd;
+        this.empPassword = empPassword;
         this.empId = empId;
         this.empName = empName;
         this.supervisorName = supervisorName;
@@ -58,12 +60,12 @@ public class Employee {
         this.empEmail = empEmail;
     }
 
-    public String getEmpPasswd() {
-        return empPasswd;
+    public String getEmpPassword() {
+        return empPassword;
     }
 
-    public void setEmpPasswd(String empPasswd) {
-        this.empPasswd = empPasswd;
+    public void setEmpPassword(String empPassword) {
+        this.empPassword = empPassword;
     }
 
     public String getEmpId() {
@@ -114,27 +116,27 @@ public class Employee {
         this.amdocsJourney = amdocsJourney;
     }
 
-    public String getFunctionalKnowledge() {
+    public List<String> getFunctionalKnowledge() {
         return functionalKnowledge;
     }
 
-    public void setFunctionalKnowledge(String functionalKnowledge) {
+    public void setFunctionalKnowledge(List<String> functionalKnowledge) {
         this.functionalKnowledge = functionalKnowledge;
     }
 
-    public String getPrimaryTechSkill() {
+    public List<String> getPrimaryTechSkill() {
         return primaryTechSkill;
     }
 
-    public void setPrimaryTechSkill(String primaryTechSkill) {
+    public void setPrimaryTechSkill(List<String> primaryTechSkill) {
         this.primaryTechSkill = primaryTechSkill;
     }
 
-    public String getPrimaryProductSubdomain() {
+    public List<String> getPrimaryProductSubdomain() {
         return primaryProductSubdomain;
     }
 
-    public void setPrimaryProductSubdomain(String primaryProductSubdomain) {
+    public void setPrimaryProductSubdomain(List<String> primaryProductSubdomain) {
         this.primaryProductSubdomain = primaryProductSubdomain;
     }
 

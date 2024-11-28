@@ -3,13 +3,15 @@ package com.amdocs.coe_dashboard.models;
 public class Admin {
     private String adminEmail;
     private String adminPassword;
+    private String adminName;
 
     public Admin() {
     }
 
-    public Admin(String adminEmail, String adminPassword) {
+    public Admin(String adminEmail, String adminPassword, String adminName) {
         this.adminEmail = adminEmail;
         this.adminPassword = adminPassword;
+        this.adminName = adminName;
     }
 
     public String getAdminEmail() {
@@ -26,5 +28,13 @@ public class Admin {
 
     public void setAdminPassword(String adminPassword) {
         this.adminPassword = adminPassword;
+    }
+
+    public String getAdminName() {
+        return adminName;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
     }
 }
