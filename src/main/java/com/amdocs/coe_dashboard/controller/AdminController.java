@@ -117,7 +117,7 @@ public class AdminController {
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
         }  catch (JWTVerificationException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
