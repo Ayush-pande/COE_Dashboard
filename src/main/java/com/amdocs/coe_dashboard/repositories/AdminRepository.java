@@ -18,7 +18,7 @@ public interface AdminRepository {
 
     Employee getEmpById(String id);
 
-    List<Employee> getAllEmp();
+    List<Employee> getAllEmp(int limit, int offset);
 
     String delete(String id);
 }

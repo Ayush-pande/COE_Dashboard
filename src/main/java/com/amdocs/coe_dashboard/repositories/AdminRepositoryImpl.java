@@ -81,16 +81,18 @@ public class AdminRepositoryImpl implements AdminRepository {
     }
 
     @Override
-    public List<Employee> getAllEmp() {
+    public List<Employee> getAllEmp(int limit, int offset) {
+        // N1QL query with pagination (LIMIT and OFFSET)
         String statement = "SELECT * FROM `"
-                + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` ";
+                + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` "
+                + "LIMIT $1 OFFSET $2";
 
         List<Employee> result = new ArrayList<>();
-        cluster
-                .query(statement,
-                        QueryOptions.queryOptions()
+        cluster.query(statement,
+                        QueryOptions.queryOptions().parameters(JsonArray.from(limit, offset))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
-                .rowsAs(EmployeeWrapper.class).forEach(e->result.add(e.getEmployee()));
+                .rowsAs(EmployeeWrapper.class)
+                .forEach(e -> result.add(e.getEmployee()));
         return result;
     }
 

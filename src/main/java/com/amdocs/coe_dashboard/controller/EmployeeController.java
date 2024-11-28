@@ -36,13 +36,13 @@ public class EmployeeController {
             String token = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPasswd());
 
             // Query the employee details again (in case you need the full employee object)
-            Page<Employee> employeeOpt = employeeService.getEmployeeDetails(employee.getEmpEmail());
+            List<Employee> employeeOpt = employeeService.getEmployeeDetails(employee.getEmpEmail());
             if (employeeOpt.isEmpty() || token.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(new Employee(),""));
             }
 
             // Create a LoginResponse containing both Employee and JWT token
-            LoginResponse loginResponse = new LoginResponse(employeeOpt.getContent().get(0), token);
+            LoginResponse loginResponse = new LoginResponse(employeeOpt.get(0), token);
             return ResponseEntity.ok(loginResponse);  // Return both Employee and Token in response body
         } catch (Exception ex) {
             log.error(ex.getMessage());
@@ -51,7 +51,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/getEmp/{input}")
-    public ResponseEntity<Page<Employee>> getEmployeeDetails(
+    public ResponseEntity<List<Employee>> getEmployeeDetails(
             @RequestHeader(value = "Authorization") String token,
             @PathVariable String input) {
         try {
@@ -59,25 +59,26 @@ public class EmployeeController {
             authenticationEmp.validateJwtToken(token);
 
             // Call the service to get paginated employee details with default pagination
-            Page<Employee> emp = employeeService.getEmployeeDetails(input);
+            List<Employee> emp = employeeService.getEmployeeDetails(input);
 
             // Return the paginated result
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(Page.empty(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return new ResponseEntity<>(Page.empty(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/getAllEmp")
-    public ResponseEntity<List<Employee>> getAllEmployees(@RequestHeader(value = "Authorization") String token) {
+    public ResponseEntity<List<Employee>> getAllEmployees(@RequestHeader(value = "Authorization") String token, @RequestParam(defaultValue = "5") int limit,
+                                                          @RequestParam(defaultValue = "0") int offset) {
         try {
             authenticationEmp.validateJwtToken(token);
 
-            List<Employee> emp = employeeService.getAllEmployees();
+            List<Employee> emp = employeeService.getAllEmployees(limit,offset);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
         }  catch (JWTVerificationException e) {
             log.error(e.getMessage());

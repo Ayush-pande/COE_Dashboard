@@ -16,7 +16,7 @@ public interface AdminService {
 
     Employee addEmployee(String id, Employee employee);
 
-    List<Employee> getAllEmployees();
+    List<Employee> getAllEmployees(int limit, int offset);
 
     String deleteEmployee(String id);
 }

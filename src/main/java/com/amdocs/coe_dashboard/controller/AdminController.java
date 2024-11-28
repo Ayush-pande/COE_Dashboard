@@ -108,15 +108,16 @@ public class AdminController {
     }
 
     @GetMapping("/getAllEmp")
-    public ResponseEntity<List<Employee>> getAllEmployees(@RequestHeader(value = "Authorization") String token) {
+    public ResponseEntity<List<Employee>> getAllEmployees(@RequestHeader(value = "Authorization") String token, @RequestParam(defaultValue = "5") int limit,
+                                                          @RequestParam(defaultValue = "0") int offset) {
         try {
             authentication.validateJwtToken(token);
 
-            List<Employee> emp = adminService.getAllEmployees();
+            List<Employee> emp = adminService.getAllEmployees(limit,offset);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
         }  catch (JWTVerificationException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);

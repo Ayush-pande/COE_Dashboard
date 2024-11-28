@@ -49,10 +49,9 @@ public class AdminServiceImpl implements AdminService{
         return adminRepository.addEmp(id, employee);
     }
 
-    public List<Employee> getAllEmployees() {
-        return adminRepository.getAllEmp();
+    public List<Employee> getAllEmployees(int limit ,int offset) {
+        return adminRepository.getAllEmp(limit,offset);
     }
-
     @Override
     public String deleteEmployee(String id) {
         return adminRepository.delete(id);

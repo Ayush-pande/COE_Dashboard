@@ -12,12 +12,12 @@ public interface EmployeeService {
 
     Employee registerEmployee(String id, Employee employee);
 
-    Page<Employee> getEmployeeDetails(String input);
+    List<Employee> getEmployeeDetails(String input);
 
     Employee getEmployeeDetailsById(String id);
 
     // Method to update employee details
     Employee updateEmployeeDetails(String employeeId, Employee updatedProfile);
-    List<Employee> getAllEmployees();
+    List<Employee> getAllEmployees(int limit ,int offset);
 
 }

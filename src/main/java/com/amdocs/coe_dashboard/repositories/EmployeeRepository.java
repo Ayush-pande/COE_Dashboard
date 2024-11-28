@@ -12,12 +12,14 @@ public interface EmployeeRepository {
 
     Optional<Employee> employeeLogin(String email, String passwd);
 
-    Page<Employee> findByIdOrName(String name);
+
+
+    List<Employee> findByIdOrName(String input);
 
     Employee addEmp(String id, Employee employee);
 
     Employee update(String id, Employee employee);
 
     Employee getEmpById(String id);
-    List<Employee> getAllEmp();
+    List<Employee> getAllEmp(int limit,int offset);
 }

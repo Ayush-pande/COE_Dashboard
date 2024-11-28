@@ -76,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Page<Employee> getEmployeeDetails(String input) {
+    public List<Employee> getEmployeeDetails(String input) {
         // Call the repository method to get paginated employees using default pagination
         return employeeRepository.findByIdOrName(input);
     }
@@ -91,7 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.getAllEmp();
+    public List<Employee> getAllEmployees(int limit ,int offset) {
+        return employeeRepository.getAllEmp(limit,offset);
     }
 }
