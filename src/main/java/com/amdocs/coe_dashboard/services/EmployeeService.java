@@ -1,6 +1,7 @@
 package com.amdocs.coe_dashboard.services;
 
 import com.amdocs.coe_dashboard.models.Employee;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface EmployeeService {
 
     Employee registerEmployee(String id, Employee employee);
 
-    List<Employee> getEmployeeDetails(String input);
+    Page<Employee> getEmployeeDetails(String input);
 
     Employee getEmployeeDetailsById(String id);
 

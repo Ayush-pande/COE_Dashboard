@@ -10,6 +10,9 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -48,20 +51,32 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
 
     @Override
-    public List<Employee> findByIdOrName(String input) {
+    public Page<Employee> findByIdOrName(String input) {
+        // Define default page and size if not passed as parameters
+        int defaultPage = 0;  // Default first page
+        int defaultSize = 3; // Default size per page
+
+        // Calculate offset based on default pagination (0-based index)
+        int offset = defaultPage * defaultSize;
+
+        // N1QL query with pagination (LIMIT and OFFSET)
         String statement = "SELECT * FROM `"
                 + couchbaseConfig.getBucketName() + "`.`dashboard`.`employee` "
                 + "WHERE LOWER(empId) LIKE '%' || LOWER($1) || '%' "
                 + "OR LOWER(empEmail) LIKE '%' || LOWER($1) || '%' "
-                + "OR LOWER(empName) LIKE '%' || LOWER($1) || '%'";
+                + "OR LOWER(empName) LIKE '%' || LOWER($1) || '%' "
+                + "LIMIT $2 OFFSET $3";
 
+        // Execute the query with parameters: input, default size (LIMIT), and offset
         List<Employee> result = new ArrayList<>();
-        cluster
-                .query(statement,
-                        QueryOptions.queryOptions().parameters(JsonArray.from(input))
+        cluster.query(statement,
+                        QueryOptions.queryOptions().parameters(JsonArray.from(input, defaultSize, offset))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
-                .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
-        return result;
+                .rowsAs(EmployeeWrapper.class)
+                .forEach(e -> result.add(e.getEmployee()));
+
+        // Return paginated result as a Page object
+        return new PageImpl<>(result, PageRequest.of(defaultPage, defaultSize), result.size());
     }
 
     @Override

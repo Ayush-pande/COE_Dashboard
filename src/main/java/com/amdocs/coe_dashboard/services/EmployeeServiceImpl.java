@@ -10,6 +10,7 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -75,11 +76,10 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public List<Employee> getEmployeeDetails(String input) {
-
+    public Page<Employee> getEmployeeDetails(String input) {
+        // Call the repository method to get paginated employees using default pagination
         return employeeRepository.findByIdOrName(input);
     }
-
     @Override
     public Employee getEmployeeDetailsById(String id) {
         return employeeRepository.getEmpById(id);

@@ -1,6 +1,7 @@
 package com.amdocs.coe_dashboard.repositories;
 
 import com.amdocs.coe_dashboard.models.Employee;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface EmployeeRepository {
 
     Optional<Employee> employeeLogin(String email, String passwd);
 
-    List<Employee> findByIdOrName(String name);
+    Page<Employee> findByIdOrName(String name);
 
     Employee addEmp(String id, Employee employee);
 
