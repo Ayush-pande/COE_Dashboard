@@ -19,4 +19,8 @@ public interface AdminService {
     List<Employee> getAllEmployees();
 
     String deleteEmployee(String id);
+
+    List<Employee> getRegisterRequests();
+
+    Employee approveRequest(Employee employee);
 }

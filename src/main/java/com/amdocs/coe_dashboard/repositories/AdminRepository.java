@@ -20,4 +20,8 @@ public interface AdminRepository {
     List<Employee> getAllEmp();
 
     String delete(String id);
+
+    List<Employee> getRegisterRequests();
+
+    Employee approveRequest(Employee employee);
 }

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,16 +94,16 @@ public class EmployeeController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerEmployee( @RequestBody Employee employee){
+    public ResponseEntity<String> registerEmployee(@RequestBody Employee employee){
         try {
             employeeService.registerEmployee(employee.getEmpId(), employee);
-            String token = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPassword());
+//            String token = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPassword());
 
-            if(token.isEmpty()){
-                //delete employee registered
-                return new ResponseEntity<>("", HttpStatus.CREATED);
-            }
-            return new ResponseEntity<>(token, HttpStatus.CREATED);
+//            if(token.isEmpty()){
+//                //delete employee registered
+//                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
+//            }
+            return new ResponseEntity<>("success", HttpStatus.CREATED);
         }  catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);

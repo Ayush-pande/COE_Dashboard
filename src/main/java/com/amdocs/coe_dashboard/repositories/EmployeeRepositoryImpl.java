@@ -20,12 +20,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
     private final Cluster cluster;
     private final Collection employeeCol;
+    private final Collection registerCol;
     private final CouchbaseConfig couchbaseConfig;
 
 
     public EmployeeRepositoryImpl(Cluster cluster, Bucket bucket, CouchbaseConfig couchbaseConfig) {
         this.cluster = cluster;
         this.employeeCol = bucket.scope("dashboard").collection("employee");
+        this.registerCol = bucket.scope("dashboard").collection("register_requests");
         this.couchbaseConfig = couchbaseConfig;
     }
 
@@ -65,7 +67,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
     @Override
     public Employee addEmp(String id, Employee employee) {
-        employeeCol.insert(id, employee);
+        registerCol.insert(id, employee);
         return employee;
     }
 

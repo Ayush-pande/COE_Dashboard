@@ -5,6 +5,8 @@ import com.amdocs.coe_dashboard.models.Admin;
 import com.amdocs.coe_dashboard.models.Employee;
 import com.amdocs.coe_dashboard.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,19 @@ public class AdminServiceImpl implements AdminService{
     AdminRepository adminRepository;
     @Autowired
     Authentication authentication;
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    public void sendSimpleEmail(String to, String name) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("server.email949@gmail.com");  // You can also specify the sender here
+        message.setTo(to);  // Recipient's email
+        message.setSubject("Register Request Approved");  // Email subject
+        message.setText("Hello "+name+". Your register request was approved. Please login once to check");  // Email content
+
+        // Send email
+        javaMailSender.send(message);
+    }
 
     @Override
     public String adminLogin(String email, String passwd) {
@@ -55,5 +70,17 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public String deleteEmployee(String id) {
         return adminRepository.delete(id);
+    }
+
+    @Override
+    public List<Employee> getRegisterRequests() {
+        return adminRepository.getRegisterRequests();
+    }
+
+    @Override
+    public Employee approveRequest(Employee employee) {
+        adminRepository.approveRequest(employee);
+        sendSimpleEmail(employee.getEmpEmail(), employee.getEmpName());
+        return employee;
     }
 }

@@ -1,10 +1,7 @@
 package com.amdocs.coe_dashboard.repositories;
 
 import com.amdocs.coe_dashboard.config.CouchbaseConfig;
-import com.amdocs.coe_dashboard.models.Admin;
-import com.amdocs.coe_dashboard.models.AdminWrapper;
-import com.amdocs.coe_dashboard.models.Employee;
-import com.amdocs.coe_dashboard.models.EmployeeWrapper;
+import com.amdocs.coe_dashboard.models.*;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
@@ -20,13 +17,17 @@ import java.util.Optional;
 @Repository
 public class AdminRepositoryImpl implements AdminRepository {
     private final Cluster cluster;
+//    private final Bucket bucket;
     private final Collection employeeCol;
+    private final Collection requestsCol;
     private final CouchbaseConfig couchbaseConfig;
 
 
     public AdminRepositoryImpl(Cluster cluster, Bucket bucket, CouchbaseConfig couchbaseConfig) {
         this.cluster = cluster;
+//        this.bucket = bucket;
         this.employeeCol = bucket.scope("dashboard").collection("employee");
+        this.requestsCol = bucket.scope("dashboard").collection("register_requests");
         this.couchbaseConfig = couchbaseConfig;
     }
     @Override
@@ -97,6 +98,32 @@ public class AdminRepositoryImpl implements AdminRepository {
     public String delete(String id) {
         employeeCol.remove(id);
         return id;
+    }
+
+    @Override
+    public List<Employee> getRegisterRequests() {
+        String statement = "SELECT * FROM `"
+                + couchbaseConfig.getBucketName() + "`.`dashboard`.`register_requests` ";
+
+        List<Employee> result = new ArrayList<>();
+        cluster
+                .query(statement,
+                        QueryOptions.queryOptions()
+                                .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
+                .rowsAs(RegisterRequestWrapper.class).forEach(e->result.add(e.getRegister_requests()));
+        return result;
+    }
+
+    @Override
+    public Employee approveRequest(Employee employee) {
+
+        employeeCol.insert(employee.getEmpId(), employee);
+
+        employee.setApproved(true);
+
+        requestsCol.remove(employee.getEmpId());
+
+        return employee;
     }
 
 }

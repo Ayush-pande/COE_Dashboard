@@ -24,11 +24,12 @@ public class Employee {
     private int presentationSkills; // Presentation skills (on a scale of 1-5)
     private String hobbiesSports; // Hobbies or sports
     private String additionalInfo; // Anything else you want to mention
+    private boolean approved;
 
     public Employee() {
     }
 
-    public Employee(String empEmail, String empPassword, String empId, String empName, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo) {
+    public Employee(String empEmail, String empPassword, String empId, String empName, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo, boolean approved) {
         this.empEmail = empEmail;
         this.empPassword = empPassword;
         this.empId = empId;
@@ -50,6 +51,15 @@ public class Employee {
         this.presentationSkills = presentationSkills;
         this.hobbiesSports = hobbiesSports;
         this.additionalInfo = additionalInfo;
+        this.approved = approved;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public String getEmpEmail() {

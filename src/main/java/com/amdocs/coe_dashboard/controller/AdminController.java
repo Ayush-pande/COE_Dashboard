@@ -139,4 +139,36 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/getApprovals")
+    public ResponseEntity<List<Employee>> getRegisterRequests(@RequestHeader(value = "Authorization") String token) {
+        try {
+            authentication.validateJwtToken(token);
+
+            return new ResponseEntity<>(adminService.getRegisterRequests(), HttpStatus.ACCEPTED);
+        }   catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/approve")
+    public ResponseEntity<Employee> approveRequest(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee) {
+        try {
+            authentication.validateJwtToken(token);
+
+            adminService.approveRequest(employee);
+
+            return new ResponseEntity<>(employee, HttpStatus.ACCEPTED);
+        }  catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
