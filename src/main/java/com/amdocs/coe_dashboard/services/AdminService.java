@@ -23,4 +23,6 @@ public interface AdminService {
     List<Employee> getRegisterRequests();
 
     Employee approveRequest(Employee employee);
+
+    Employee rejectRequest(Employee employee);
 }

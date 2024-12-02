@@ -24,4 +24,6 @@ public interface AdminRepository {
     List<Employee> getRegisterRequests();
 
     Employee approveRequest(Employee employee);
+
+    Employee rejectRequest(Employee employee);
 }

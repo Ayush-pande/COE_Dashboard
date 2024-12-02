@@ -16,6 +16,7 @@ public interface EmployeeService {
 
     // Method to update employee details
     Employee updateEmployeeDetails(String employeeId, Employee updatedProfile);
+
     List<Employee> getAllEmployees();
 
 }

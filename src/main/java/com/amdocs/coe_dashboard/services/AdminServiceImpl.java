@@ -22,12 +22,12 @@ public class AdminServiceImpl implements AdminService{
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public void sendSimpleEmail(String to, String name) {
+    public void sendSimpleEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("server.email949@gmail.com");  // You can also specify the sender here
         message.setTo(to);  // Recipient's email
-        message.setSubject("Register Request Approved");  // Email subject
-        message.setText("Hello "+name+". Your register request was approved. Please login once to check");  // Email content
+        message.setSubject(subject);  // Email subject
+        message.setText(text);  // Email content
 
         // Send email
         javaMailSender.send(message);
@@ -80,7 +80,14 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Employee approveRequest(Employee employee) {
         adminRepository.approveRequest(employee);
-        sendSimpleEmail(employee.getEmpEmail(), employee.getEmpName());
+        sendSimpleEmail(employee.getEmpEmail(), "Register Request Approve","Hello "+employee.getEmpName()+". Your register request was approved. Please login once to check");
+        return employee;
+    }
+
+    @Override
+    public Employee rejectRequest(Employee employee) {
+        adminRepository.rejectRequest(employee);
+        sendSimpleEmail(employee.getEmpEmail(), "Register Request Rejected","Hello "+employee.getEmpName()+". Your register request was rejected.");
         return employee;
     }
 }

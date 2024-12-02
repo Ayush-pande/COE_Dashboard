@@ -17,7 +17,6 @@ import java.util.Optional;
 @Repository
 public class AdminRepositoryImpl implements AdminRepository {
     private final Cluster cluster;
-//    private final Bucket bucket;
     private final Collection employeeCol;
     private final Collection requestsCol;
     private final CouchbaseConfig couchbaseConfig;
@@ -25,7 +24,6 @@ public class AdminRepositoryImpl implements AdminRepository {
 
     public AdminRepositoryImpl(Cluster cluster, Bucket bucket, CouchbaseConfig couchbaseConfig) {
         this.cluster = cluster;
-//        this.bucket = bucket;
         this.employeeCol = bucket.scope("dashboard").collection("employee");
         this.requestsCol = bucket.scope("dashboard").collection("register_requests");
         this.couchbaseConfig = couchbaseConfig;
@@ -40,7 +38,6 @@ public class AdminRepositoryImpl implements AdminRepository {
                         QueryOptions.queryOptions().parameters(JsonArray.from(email, passwd))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(AdminWrapper.class).forEach(e->result.add(e.getAdmin()));
-//        System.out.println(result.rowsAs(AdminWrapper.class));
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
 
     }
@@ -116,13 +113,18 @@ public class AdminRepositoryImpl implements AdminRepository {
 
     @Override
     public Employee approveRequest(Employee employee) {
+        employee.setApproved(true);
 
         employeeCol.insert(employee.getEmpId(), employee);
 
-        employee.setApproved(true);
-
         requestsCol.remove(employee.getEmpId());
 
+        return employee;
+    }
+
+    @Override
+    public Employee rejectRequest(Employee employee) {
+        requestsCol.remove(employee.getEmpId());
         return employee;
     }
 
