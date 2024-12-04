@@ -1,6 +1,7 @@
 package com.amdocs.coe_dashboard.controller;
 
 
+import com.amdocs.coe_dashboard.authentication.AuthForgotPassword;
 import com.amdocs.coe_dashboard.authentication.AuthenticationEmp;
 import com.amdocs.coe_dashboard.models.Employee;
 import com.amdocs.coe_dashboard.models.LoginResponse;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class EmployeeController {
     EmployeeService employeeService;
     @Autowired
     AuthenticationEmp authenticationEmp;
+    @Autowired
+    AuthForgotPassword authForgotPassword;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> employeeLogin(@RequestBody Employee employee) {
@@ -34,7 +38,7 @@ public class EmployeeController {
             // Query the employee details again (in case you need the full employee object)
             List<Employee> employeeOpt = employeeService.getEmployeeDetails(employee.getEmpEmail());
             if (token.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(new Employee(),""));
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(new Employee(), ""));
             }
 
             // Create a LoginResponse containing both Employee and JWT token
@@ -42,7 +46,7 @@ public class EmployeeController {
             return ResponseEntity.ok(loginResponse);  // Return both Employee and Token in response body
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse(new Employee(),""));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse(new Employee(), ""));
         }
     }
 
@@ -53,7 +57,7 @@ public class EmployeeController {
 
             List<Employee> emp = employeeService.getEmployeeDetails(input);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
@@ -69,7 +73,7 @@ public class EmployeeController {
 
             List<Employee> emp = employeeService.getAllEmployees();
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         } catch (Exception ex) {
@@ -84,17 +88,17 @@ public class EmployeeController {
             authenticationEmp.validateJwtToken(token);
             Employee emp = employeeService.getEmployeeDetailsById(id);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerEmployee(@RequestBody Employee employee){
+    public ResponseEntity<String> registerEmployee(@RequestBody Employee employee) {
         try {
             employeeService.registerEmployee(employee.getEmpId(), employee);
 //            String token = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPassword());
@@ -104,29 +108,84 @@ public class EmployeeController {
 //                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
 //            }
             return new ResponseEntity<>("success", HttpStatus.CREATED);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Employee> updateEmployeeDetails(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee){
+    public ResponseEntity<Employee> updateEmployeeDetails(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee) {
         try {
             authenticationEmp.validateJwtToken(token);
-            Employee emp = employeeService.updateEmployeeDetails(employee.getEmpId(),employee);
+            Employee emp = employeeService.updateEmployeeDetails(employee.getEmpId(), employee);
             return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotEmployeePassword(@RequestBody Employee employee) {
+        try {
+            if (employeeService.forgotPassword(employee.getEmpEmail()))
+                return new ResponseEntity<>("success", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("fail", HttpStatus.FORBIDDEN);
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetEmployeePassword(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee) {
+        try {
+            authForgotPassword.validateJwtToken(token);
+            if (employeeService.resetPassword(authForgotPassword.getEmployeeEmail(token), employee.getEmpPassword()))
+                return new ResponseEntity<>("success", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("fail", HttpStatus.FORBIDDEN);
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/getDomain")
+    public ResponseEntity<List<String>> getEmployeeDomainList() {
+        try {
+            return new ResponseEntity<>(employeeService.getEmployeeDomainList(), HttpStatus.OK);
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/getSkills")
+    public ResponseEntity<List<String>> getEmployeeSkillsList() {
+        try {
+            return new ResponseEntity<>(employeeService.getEmployeeSkillsList(), HttpStatus.OK);
+        } catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

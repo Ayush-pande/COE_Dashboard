@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AdminServiceImpl implements AdminService{
+public class AdminServiceImpl implements AdminService {
 
     @Autowired
     AdminRepository adminRepository;
@@ -37,7 +37,7 @@ public class AdminServiceImpl implements AdminService{
     public String adminLogin(String email, String passwd) {
         Optional<Admin> adminOpt = adminRepository.adminLogin(email, passwd);
 
-        if(adminOpt.isEmpty())
+        if (adminOpt.isEmpty())
             return "";
 
         return authentication.generateJwtToken(adminOpt.get().getAdminEmail());
@@ -80,24 +80,24 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Employee approveRequest(Employee employee) {
         adminRepository.approveRequest(employee);
-        sendSimpleEmail(employee.getEmpEmail(), "Register Request Approve","Hello "+employee.getEmpName()+". Your register request was approved. Please login once to check");
+        sendSimpleEmail(employee.getEmpEmail(), "Register Request Approve", "Hello " + employee.getEmpName() + ". Your register request was approved. Please login once to check");
         return employee;
     }
 
     @Override
     public Employee rejectRequest(Employee employee) {
         adminRepository.rejectRequest(employee);
-        sendSimpleEmail(employee.getEmpEmail(), "Register Request Rejected","Hello "+employee.getEmpName()+". Your register request was rejected.");
+        sendSimpleEmail(employee.getEmpEmail(), "Register Request Rejected", "Hello " + employee.getEmpName() + ". Your register request was rejected.");
         return employee;
     }
 
     @Override
-    public  List<String> getEmployeeDomainList(){
+    public List<String> getEmployeeDomainList() {
         return adminRepository.getEmployeeDomainList();
     }
 
     @Override
-    public  List<String> getEmployeeSkillsList(){
+    public List<String> getEmployeeSkillsList() {
         return adminRepository.getEmployeeSkillsList();
     }
 }

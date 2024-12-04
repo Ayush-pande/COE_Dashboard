@@ -22,8 +22,8 @@ public class Admin {
         return adminPassword;
     }
 
-    public void setAdminEmail(String adminEmail){
-        this.adminEmail=adminEmail;
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
     }
 
     public void setAdminPassword(String adminPassword) {

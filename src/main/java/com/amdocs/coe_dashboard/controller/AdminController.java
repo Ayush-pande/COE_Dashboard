@@ -26,7 +26,7 @@ public class AdminController {
     Authentication authentication;
 
     @GetMapping("/")
-    public ResponseEntity<String> getTest(){
+    public ResponseEntity<String> getTest() {
         return new ResponseEntity<>("Working", HttpStatus.OK);
     }
 
@@ -34,7 +34,7 @@ public class AdminController {
     public ResponseEntity<String> adminLogin(@RequestBody Admin admin) {
         try {
             String token = adminService.adminLogin(admin.getAdminEmail(), admin.getAdminPassword());
-            if(token.isEmpty())
+            if (token.isEmpty())
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(token);
 
             return ResponseEntity.status(HttpStatus.OK).body(token);
@@ -56,7 +56,7 @@ public class AdminController {
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
@@ -71,14 +71,14 @@ public class AdminController {
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Employee> addEmployee(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee){
+    public ResponseEntity<Employee> addEmployee(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee) {
         try {
             authentication.validateJwtToken(token);
             Employee emp = adminService.addEmployee(employee.getEmpId(), employee);
@@ -93,10 +93,10 @@ public class AdminController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Employee> updateEmployeeDetails(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee){
+    public ResponseEntity<Employee> updateEmployeeDetails(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee) {
         try {
             authentication.validateJwtToken(token);
-            Employee emp = adminService.updateEmployeeDetails(employee.getEmpId(),employee);
+            Employee emp = adminService.updateEmployeeDetails(employee.getEmpId(), employee);
             return new ResponseEntity<>(emp, HttpStatus.OK);
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
@@ -114,7 +114,7 @@ public class AdminController {
 
             List<Employee> emp = adminService.getAllEmployees();
             return new ResponseEntity<>(emp, HttpStatus.OK);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
@@ -130,7 +130,7 @@ public class AdminController {
 
             adminService.deleteEmployee(employee.getEmpId());
             return new ResponseEntity<>("success", HttpStatus.OK);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>("invalid", HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
@@ -145,7 +145,7 @@ public class AdminController {
             authentication.validateJwtToken(token);
 
             return new ResponseEntity<>(adminService.getRegisterRequests(), HttpStatus.OK);
-        }   catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
@@ -162,7 +162,7 @@ public class AdminController {
             adminService.approveRequest(employee);
 
             return new ResponseEntity<>(employee, HttpStatus.OK);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
@@ -179,7 +179,7 @@ public class AdminController {
             adminService.rejectRequest(employee);
 
             return new ResponseEntity<>(employee, HttpStatus.OK);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
@@ -194,7 +194,7 @@ public class AdminController {
             authentication.validateJwtToken(token);
 
             return new ResponseEntity<>(adminService.getEmployeeDomainList(), HttpStatus.OK);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
@@ -209,7 +209,7 @@ public class AdminController {
             authentication.validateJwtToken(token);
 
             return new ResponseEntity<>(adminService.getEmployeeSkillsList(), HttpStatus.OK);
-        }  catch (JWTVerificationException e) {
+        } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
@@ -217,5 +217,4 @@ public class AdminController {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
     }
-
 }

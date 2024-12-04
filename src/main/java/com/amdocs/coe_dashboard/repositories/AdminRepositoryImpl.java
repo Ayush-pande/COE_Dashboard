@@ -29,6 +29,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         this.requestsCol = bucket.scope("dashboard").collection("register_requests");
         this.couchbaseConfig = couchbaseConfig;
     }
+
     @Override
     public Optional<Admin> adminLogin(String email, String passwd) {
         String statement = "SELECT * FROM `"
@@ -38,7 +39,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                 .query(statement,
                         QueryOptions.queryOptions().parameters(JsonArray.from(email, passwd))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
-                .rowsAs(AdminWrapper.class).forEach(e->result.add(e.getAdmin()));
+                .rowsAs(AdminWrapper.class).forEach(e -> result.add(e.getAdmin()));
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
 
     }
@@ -88,7 +89,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                 .query(statement,
                         QueryOptions.queryOptions()
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
-                .rowsAs(EmployeeWrapper.class).forEach(e->result.add(e.getEmployee()));
+                .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
         return result;
     }
 
@@ -108,7 +109,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                 .query(statement,
                         QueryOptions.queryOptions()
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
-                .rowsAs(RegisterRequestWrapper.class).forEach(e->result.add(e.getRegister_requests()));
+                .rowsAs(RegisterRequestWrapper.class).forEach(e -> result.add(e.getRegister_requests()));
         return result;
     }
 
@@ -129,6 +130,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         return employee;
     }
 
+    @Override
     public List<String> getEmployeeDomainList() {
         String statement = "SELECT skills FROM `"
                 + couchbaseConfig.getBucketName() + "`.`dashboard`.`filter_dropdowns` WHERE meta().id = 'functionalKnowledge'";
@@ -150,6 +152,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         return result;
     }
 
+    @Override
     public List<String> getEmployeeSkillsList() {
         String statement = "SELECT skills FROM `"
                 + couchbaseConfig.getBucketName() + "`.`dashboard`.`filter_dropdowns` WHERE meta().id = 'primaryTechSkill'";

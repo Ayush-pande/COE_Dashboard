@@ -19,4 +19,12 @@ public interface EmployeeService {
 
     List<Employee> getAllEmployees();
 
+    Boolean forgotPassword(String email);
+
+    Boolean resetPassword(String email, String newPassword);
+
+    List<String> getEmployeeDomainList();
+
+    List<String> getEmployeeSkillsList();
+
 }

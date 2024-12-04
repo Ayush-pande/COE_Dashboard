@@ -16,5 +16,10 @@ public interface EmployeeRepository {
     Employee update(String id, Employee employee);
 
     Employee getEmpById(String id);
+
     List<Employee> getAllEmp();
+
+    List<String> getEmployeeDomainList();
+
+    List<String> getEmployeeSkillsList();
 }

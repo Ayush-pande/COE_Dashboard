@@ -7,6 +7,7 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonArray;
+import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.stereotype.Repository;
@@ -94,6 +95,48 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                         QueryOptions.queryOptions()
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(EmployeeWrapper.class).forEach(e->result.add(e.getEmployee()));
+        return result;
+    }
+    @Override
+    public List<String> getEmployeeDomainList() {
+        String statement = "SELECT skills FROM `"
+                + couchbaseConfig.getBucketName() + "`.`dashboard`.`filter_dropdowns` WHERE meta().id = 'functionalKnowledge'";
+
+        List<String> result = new ArrayList<>();
+
+        // Execute the query and process the results
+        cluster.query(statement,
+                        QueryOptions.queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS))
+                .rowsAs(JsonObject.class)  // Map the result to JsonObject since we're working with a specific field
+                .forEach(row -> {
+                    // Extract the 'skills' array from the row
+                    JsonArray skillsArray = row.getArray("skills");
+                    if (skillsArray != null) {
+                        skillsArray.forEach(skill -> result.add(skill.toString()));  // Add each skill to the result list
+                    }
+                });
+
+        return result;
+    }
+    @Override
+    public List<String> getEmployeeSkillsList() {
+        String statement = "SELECT skills FROM `"
+                + couchbaseConfig.getBucketName() + "`.`dashboard`.`filter_dropdowns` WHERE meta().id = 'primaryTechSkill'";
+
+        List<String> result = new ArrayList<>();
+
+        // Execute the query and process the results
+        cluster.query(statement,
+                        QueryOptions.queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS))
+                .rowsAs(JsonObject.class)  // Map the result to JsonObject since we're working with a specific field
+                .forEach(row -> {
+                    // Extract the 'skills' array from the row
+                    JsonArray skillsArray = row.getArray("skills");
+                    if (skillsArray != null) {
+                        skillsArray.forEach(skill -> result.add(skill.toString()));  // Add each skill to the result list
+                    }
+                });
+
         return result;
     }
 }

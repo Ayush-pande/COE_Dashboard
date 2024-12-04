@@ -29,4 +29,5 @@ public interface AdminService {
     List<String> getEmployeeDomainList();
 
     List<String> getEmployeeSkillsList();
+
 }
