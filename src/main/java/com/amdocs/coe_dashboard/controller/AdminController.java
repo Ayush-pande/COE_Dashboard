@@ -188,4 +188,34 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/getDomain")
+    public ResponseEntity<List<String>> getEmployeeDomainList(@RequestHeader(value = "Authorization") String token) {
+        try {
+            authentication.validateJwtToken(token);
+
+            return new ResponseEntity<>(adminService.getEmployeeDomainList(), HttpStatus.OK);
+        }  catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/getSkills")
+    public ResponseEntity<List<String>> getEmployeeSkillsList(@RequestHeader(value = "Authorization") String token) {
+        try {
+            authentication.validateJwtToken(token);
+
+            return new ResponseEntity<>(adminService.getEmployeeSkillsList(), HttpStatus.OK);
+        }  catch (JWTVerificationException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

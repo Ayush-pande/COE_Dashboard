@@ -90,4 +90,14 @@ public class AdminServiceImpl implements AdminService{
         sendSimpleEmail(employee.getEmpEmail(), "Register Request Rejected","Hello "+employee.getEmpName()+". Your register request was rejected.");
         return employee;
     }
+
+    @Override
+    public  List<String> getEmployeeDomainList(){
+        return adminRepository.getEmployeeDomainList();
+    }
+
+    @Override
+    public  List<String> getEmployeeSkillsList(){
+        return adminRepository.getEmployeeSkillsList();
+    }
 }

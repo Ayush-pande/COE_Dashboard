@@ -25,4 +25,8 @@ public interface AdminService {
     Employee approveRequest(Employee employee);
 
     Employee rejectRequest(Employee employee);
+
+    List<String> getEmployeeDomainList();
+
+    List<String> getEmployeeSkillsList();
 }
