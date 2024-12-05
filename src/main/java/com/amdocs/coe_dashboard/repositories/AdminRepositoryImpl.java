@@ -58,6 +58,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                         QueryOptions.queryOptions().parameters(JsonArray.from(input, input))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
+        result.forEach(e->e.setEmpPassword(null));
         return result;
     }
 
@@ -71,12 +72,15 @@ public class AdminRepositoryImpl implements AdminRepository {
     @Override
     public Employee update(String id, Employee employee) {
         employeeCol.replace(id, employee);
+        employee.setEmpPassword(null);
         return employee;
     }
 
     @Override
     public Employee getEmpById(String id) {
-        return employeeCol.get(id).contentAs(Employee.class);
+        Employee emp = employeeCol.get(id).contentAs(Employee.class);
+        emp.setEmpPassword(null);
+        return emp;
     }
 
     @Override
@@ -90,6 +94,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                         QueryOptions.queryOptions()
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
+        result.forEach(e->e.setEmpPassword(null));
         return result;
     }
 
@@ -110,17 +115,16 @@ public class AdminRepositoryImpl implements AdminRepository {
                         QueryOptions.queryOptions()
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(RegisterRequestWrapper.class).forEach(e -> result.add(e.getRegister_requests()));
+        result.forEach(e->e.setEmpPassword(null));
         return result;
     }
 
     @Override
     public Employee approveRequest(Employee employee) {
         employee.setApproved(true);
-
         employeeCol.insert(employee.getEmpId(), employee);
-
         requestsCol.remove(employee.getEmpId());
-
+        employee.setEmpPassword(null);
         return employee;
     }
 

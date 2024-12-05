@@ -43,6 +43,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                         QueryOptions.queryOptions().parameters(JsonArray.from(email, password))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
+        result.forEach(e->e.setEmpPassword(null));
 
         // Return the first employee found or empty if no employee is found
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
@@ -63,6 +64,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                         QueryOptions.queryOptions().parameters(JsonArray.from(input))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
+        result.forEach(e->e.setEmpPassword(null));
         return result;
     }
 
@@ -75,13 +77,15 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
     @Override
     public Employee update(String id, Employee employee) {
         employeeCol.replace(id, employee);
+        employee.setEmpPassword(null);
         return employee;
     }
 
     @Override
-    public Employee getEmpById(String id)
-    {
-         return employeeCol.get(id).contentAs(Employee.class);
+    public Employee getEmpById(String id) {
+         Employee emp = employeeCol.get(id).contentAs(Employee.class);
+         emp.setEmpPassword(null);
+         return emp;
     }
 
     @Override
@@ -95,6 +99,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                         QueryOptions.queryOptions()
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(EmployeeWrapper.class).forEach(e->result.add(e.getEmployee()));
+        result.forEach(e->e.setEmpPassword(null));
         return result;
     }
     @Override

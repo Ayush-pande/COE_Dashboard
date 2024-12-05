@@ -7,6 +7,7 @@ public class Employee {
     private String empPassword;
     private String empId;
     private String empName; // Name of the employee
+    private String empImage;
     private String currentAccount;
     private String supervisorName; // Supervisor's name in account
     private double amdocsExperience; // Amdocs Experience (years or months)
@@ -30,11 +31,12 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String empEmail, String empPassword, String empId, String empName, String currentAccount, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo, boolean approved) {
+    public Employee(String empEmail, String empPassword, String empId, String empName, String empImage, String currentAccount, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo, boolean approved) {
         this.empEmail = empEmail;
         this.empPassword = empPassword;
         this.empId = empId;
         this.empName = empName;
+        this.empImage = empImage;
         this.currentAccount = currentAccount;
         this.supervisorName = supervisorName;
         this.amdocsExperience = amdocsExperience;
@@ -54,6 +56,14 @@ public class Employee {
         this.hobbiesSports = hobbiesSports;
         this.additionalInfo = additionalInfo;
         this.approved = approved;
+    }
+
+    public String getEmpImage() {
+        return empImage;
+    }
+
+    public void setEmpImage(String empImage) {
+        this.empImage = empImage;
     }
 
     public String getCurrentAccount() {
