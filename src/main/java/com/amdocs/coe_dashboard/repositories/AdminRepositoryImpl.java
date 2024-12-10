@@ -40,8 +40,8 @@ public class AdminRepositoryImpl implements AdminRepository {
                         QueryOptions.queryOptions().parameters(JsonArray.from(email, passwd))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(AdminWrapper.class).forEach(e -> result.add(e.getAdmin()));
+        result.forEach(e->e.setAdminPassword(null));
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
-
     }
 
     @Override
@@ -66,13 +66,27 @@ public class AdminRepositoryImpl implements AdminRepository {
     @Override
     public Employee addEmp(String id, Employee employee) {
         employeeCol.insert(id, employee);
+        employee.setEmpPassword(null);
         return employee;
     }
 
     @Override
     public Employee update(String id, Employee employee) {
+        Employee existingEmployee = employeeCol.get(id).contentAs(Employee.class);
+
+        if (existingEmployee == null) {
+            throw new IllegalArgumentException("Employee with ID " + id + " not found.");
+        }
+
+        employee.setEmpId(existingEmployee.getEmpId());
+        employee.setEmpPassword(existingEmployee.getEmpPassword());
+        employee.setEmpEmail(existingEmployee.getEmpEmail());
+        employee.setEmpName(existingEmployee.getEmpName());
+
         employeeCol.replace(id, employee);
+
         employee.setEmpPassword(null);
+
         return employee;
     }
 
@@ -131,6 +145,7 @@ public class AdminRepositoryImpl implements AdminRepository {
     @Override
     public Employee rejectRequest(Employee employee) {
         requestsCol.remove(employee.getEmpId());
+        employee.setEmpPassword(null);
         return employee;
     }
 

@@ -45,7 +45,6 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                 .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
         result.forEach(e->e.setEmpPassword(null));
 
-        // Return the first employee found or empty if no employee is found
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 
@@ -71,13 +70,31 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
     @Override
     public Employee addEmp(String id, Employee employee) {
         registerCol.insert(id, employee);
+        employee.setEmpPassword(null);
         return employee;
     }
 
     @Override
     public Employee update(String id, Employee employee) {
+//        employeeCol.replace(id, employee);
+//        employee.setEmpPassword(null);
+//        return employee;
+
+        Employee existingEmployee = employeeCol.get(id).contentAs(Employee.class);
+
+        if (existingEmployee == null) {
+            throw new IllegalArgumentException("Employee with ID " + id + " not found.");
+        }
+
+        employee.setEmpId(existingEmployee.getEmpId());
+        employee.setEmpPassword(existingEmployee.getEmpPassword());
+        employee.setEmpEmail(existingEmployee.getEmpEmail());
+        employee.setEmpName(existingEmployee.getEmpName());
+
         employeeCol.replace(id, employee);
+
         employee.setEmpPassword(null);
+
         return employee;
     }
 
