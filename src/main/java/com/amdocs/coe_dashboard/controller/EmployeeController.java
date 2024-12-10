@@ -100,6 +100,10 @@ public class EmployeeController {
     @PostMapping("/register")
     public ResponseEntity<String> registerEmployee(@RequestBody Employee employee) {
         try {
+
+            if(employeeService.getEmployeeDetails(employee.getEmpEmail()).isEmpty()){
+                return new ResponseEntity<>("", HttpStatus.FORBIDDEN);
+            }
             employeeService.registerEmployee(employee.getEmpId(), employee);
 //            String token = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPassword());
 
