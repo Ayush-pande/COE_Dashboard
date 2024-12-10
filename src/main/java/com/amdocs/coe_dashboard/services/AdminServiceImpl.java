@@ -80,6 +80,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Employee approveRequest(Employee employee) {
         adminRepository.approveRequest(employee);
+        employee.setEmpPassword(null);
         sendSimpleEmail(employee.getEmpEmail(), "Register Request Approve", "Hello " + employee.getEmpName() + ". Your register request was approved. Please login once to check");
         return employee;
     }
@@ -87,6 +88,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Employee rejectRequest(Employee employee) {
         adminRepository.rejectRequest(employee);
+        employee.setEmpPassword(null);
         sendSimpleEmail(employee.getEmpEmail(), "Register Request Rejected", "Hello " + employee.getEmpName() + ". Your register request was rejected.");
         return employee;
     }
