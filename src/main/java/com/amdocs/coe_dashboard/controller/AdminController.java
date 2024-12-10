@@ -81,7 +81,7 @@ public class AdminController {
     public ResponseEntity<Employee> addEmployee(@RequestHeader(value = "Authorization") String token, @RequestBody Employee employee) {
         try {
             authentication.validateJwtToken(token);
-            if (adminService.getEmployeeDetails(employee.getEmpEmail()).isEmpty()) {
+            if (!adminService.getEmployeeDetails(employee.getEmpEmail()).isEmpty()) {
                 return new ResponseEntity<>(new Employee(), HttpStatus.FORBIDDEN);
             }
             Employee emp = adminService.addEmployee(employee.getEmpId(), employee);
