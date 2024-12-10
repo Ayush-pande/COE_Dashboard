@@ -13,6 +13,7 @@ import com.couchbase.client.java.Cluster;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
 @Configuration
 @Slf4j
 @Getter
@@ -41,7 +42,7 @@ public class CouchbaseConfig {
      * <pre>
      * spring.couchbase.bootstrap-hosts=couchbases://my-cluster.cloud.couchbase.com
      * </pre>
-     *
+     * <p>
      * Alternatively, you can enable TLS by writing code to configure the cluster
      * environment;
      * see the commented-out code in this method for an example.

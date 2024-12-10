@@ -25,7 +25,7 @@ public class AdminRepositoryImpl implements AdminRepository {
 
     public AdminRepositoryImpl(Cluster cluster, Bucket bucket, CouchbaseConfig couchbaseConfig) {
         this.cluster = cluster;
-        this.employeeCol = bucket.scope("dashboard").collection("employee");
+        this.employeeCol = bucket.scope("dashboard").collection("seed_data");
         this.requestsCol = bucket.scope("dashboard").collection("register_requests");
         this.couchbaseConfig = couchbaseConfig;
     }

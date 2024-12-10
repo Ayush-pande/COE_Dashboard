@@ -10,19 +10,21 @@ public class Employee {
     private String empImage;
     private String currentAccount;
     private String supervisorName; // Supervisor's name in account
-    private double amdocsExperience; // Amdocs Experience (years or months)
-    private double totalExperience; // Total Experience (years or months)
+    private String amdocsExperience; // Amdocs Experience (years or months)
+    private String totalExperience; // Total Experience (years or months)
     private String amdocsJourney; // Amdocs Journey (e.g., roles, growth)
     private List<String> functionalKnowledge; // Functional knowledge or domain expertise
     private List<String> primaryTechSkill; // Primary tech skill (e.g., Java, AWS)
     private List<String> primaryProductSubdomain; // Primary product or subdomain
-    private String secondaryTechSkill; // Secondary tech skill (e.g., Python, SQL)
-    private String secondaryProduct; // Secondary product knowledge
+    private List<String> secondaryTechSkill; // Secondary tech skill (e.g., Python, SQL)
+    private List<String> secondaryProduct; // Secondary product knowledge
     private String devOpsKnowledge; // DevOps knowledge (tools, CI/CD, etc.)
     private boolean mentoringAbility; // Can lead/direct 5-6 people
     private boolean explorationInterest; // Likes exploring new tools/tech
     private boolean contributedToDesign; // Contributed to Design/LLD/HLD
     private boolean engagementActivityContribution; // Can help in Engagement activities
+    private String areaOfCriticalIssue;
+    private String productionSupport;
     private int presentationSkills; // Presentation skills (on a scale of 1-5)
     private String hobbiesSports; // Hobbies or sports
     private String additionalInfo; // Anything else you want to mention
@@ -31,7 +33,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String empEmail, String empPassword, String empId, String empName, String empImage, String currentAccount, String supervisorName, double amdocsExperience, double totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, String secondaryTechSkill, String secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, int presentationSkills, String hobbiesSports, String additionalInfo, boolean approved) {
+    public Employee(String empEmail, String empPassword, String empId, String empName, String empImage, String currentAccount, String supervisorName, String amdocsExperience, String totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, List<String> secondaryTechSkill, List<String> secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, String areaOfCriticalIssue, String productionSupport, int presentationSkills, String hobbiesSports, String additionalInfo, boolean approved) {
         this.empEmail = empEmail;
         this.empPassword = empPassword;
         this.empId = empId;
@@ -52,6 +54,8 @@ public class Employee {
         this.explorationInterest = explorationInterest;
         this.contributedToDesign = contributedToDesign;
         this.engagementActivityContribution = engagementActivityContribution;
+        this.areaOfCriticalIssue = areaOfCriticalIssue;
+        this.productionSupport = productionSupport;
         this.presentationSkills = presentationSkills;
         this.hobbiesSports = hobbiesSports;
         this.additionalInfo = additionalInfo;
@@ -122,19 +126,19 @@ public class Employee {
         this.supervisorName = supervisorName;
     }
 
-    public double getAmdocsExperience() {
+    public String getAmdocsExperience() {
         return amdocsExperience;
     }
 
-    public void setAmdocsExperience(double amdocsExperience) {
+    public void setAmdocsExperience(String amdocsExperience) {
         this.amdocsExperience = amdocsExperience;
     }
 
-    public double getTotalExperience() {
+    public String getTotalExperience() {
         return totalExperience;
     }
 
-    public void setTotalExperience(double totalExperience) {
+    public void setTotalExperience(String totalExperience) {
         this.totalExperience = totalExperience;
     }
 
@@ -170,19 +174,19 @@ public class Employee {
         this.primaryProductSubdomain = primaryProductSubdomain;
     }
 
-    public String getSecondaryTechSkill() {
+    public List<String> getSecondaryTechSkill() {
         return secondaryTechSkill;
     }
 
-    public void setSecondaryTechSkill(String secondaryTechSkill) {
+    public void setSecondaryTechSkill(List<String> secondaryTechSkill) {
         this.secondaryTechSkill = secondaryTechSkill;
     }
 
-    public String getSecondaryProduct() {
+    public List<String> getSecondaryProduct() {
         return secondaryProduct;
     }
 
-    public void setSecondaryProduct(String secondaryProduct) {
+    public void setSecondaryProduct(List<String> secondaryProduct) {
         this.secondaryProduct = secondaryProduct;
     }
 
@@ -250,4 +254,20 @@ public class Employee {
         this.additionalInfo = additionalInfo;
     }
 
+    public String getAreaOfCriticalIssue() {
+        return areaOfCriticalIssue;
+    }
+
+    public void setAreaOfCriticalIssue(String areaOfCriticalIssue) {
+        this.areaOfCriticalIssue = areaOfCriticalIssue;
+    }
+
+
+    public String getProductionSupport() {
+        return productionSupport;
+    }
+
+    public void setProductionSupport(String productionSupport) {
+        this.productionSupport = productionSupport;
+    }
 }
