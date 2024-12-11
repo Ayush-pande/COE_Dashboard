@@ -135,11 +135,15 @@ public class AdminRepositoryImpl implements AdminRepository {
 
     @Override
     public Employee approveRequest(Employee employee) {
-        employee.setApproved(true);
-        employeeCol.insert(employee.getEmpId(), employee);
-        requestsCol.remove(employee.getEmpId());
-        employee.setEmpPassword(null);
-        return employee;
+        Employee emp = requestsCol.get(employee.getEmpId()).contentAs(Employee.class);
+        if (emp == null) {
+            throw new IllegalArgumentException("Employee not found.");
+        }
+        emp.setApproved(true);
+        employeeCol.insert(emp.getEmpId(), emp);
+        requestsCol.remove(emp.getEmpId());
+        emp.setEmpPassword(null);
+        return emp;
     }
 
     @Override
