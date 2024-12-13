@@ -32,16 +32,11 @@ public class EmployeeController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> employeeLogin(@RequestBody Employee employee) {
         try {
-            // Authenticate user and get the JWT token
             String token = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPassword());
-
-            // Query the employee details again (in case you need the full employee object)
             List<Employee> employeeOpt = employeeService.getEmployeeDetails(employee.getEmpEmail());
             if (token.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(new Employee(), ""));
             }
-
-            // Create a LoginResponse containing both Employee and JWT token
             LoginResponse loginResponse = new LoginResponse(employeeOpt.get(0), token);
             return ResponseEntity.ok(loginResponse);  // Return both Employee and Token in response body
         } catch (Exception ex) {
@@ -51,15 +46,10 @@ public class EmployeeController {
     }
 
     @GetMapping("/getEmp/{input}")
-    public ResponseEntity<List<Employee>> getEmployeeDetails(@RequestHeader(value = "Authorization") String token, @PathVariable String input) {
+    public ResponseEntity<List<Employee>> getEmployeeDetails(@PathVariable String input) {
         try {
-            authenticationEmp.validateJwtToken(token);
-
             List<Employee> emp = employeeService.getEmployeeDetails(input);
-            return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
-        } catch (JWTVerificationException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(emp, HttpStatus.OK);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
@@ -70,12 +60,11 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> getAllEmployees(@RequestHeader(value = "Authorization") String token) {
         try {
             authenticationEmp.validateJwtToken(token);
-
             List<Employee> emp = employeeService.getAllEmployees();
-            return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(emp, HttpStatus.OK);
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
@@ -87,7 +76,7 @@ public class EmployeeController {
         try {
             authenticationEmp.validateJwtToken(token);
             Employee emp = employeeService.getEmployeeDetailsById(id);
-            return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(emp, HttpStatus.OK);
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
@@ -100,17 +89,11 @@ public class EmployeeController {
     @PostMapping("/register")
     public ResponseEntity<String> registerEmployee(@RequestBody Employee employee) {
         try {
-
             if(!employeeService.getEmployeeDetails(employee.getEmpEmail()).isEmpty()){
                 return new ResponseEntity<>("", HttpStatus.FORBIDDEN);
             }
             employeeService.registerEmployee(employee.getEmpId(), employee);
-//            String token = employeeService.employeeLogin(employee.getEmpEmail(), employee.getEmpPassword());
 
-//            if(token.isEmpty()){
-//                //delete employee registered
-//                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
-//            }
             return new ResponseEntity<>("success", HttpStatus.CREATED);
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
@@ -126,7 +109,7 @@ public class EmployeeController {
         try {
             authenticationEmp.validateJwtToken(token);
             Employee emp = employeeService.updateEmployeeDetails(employee.getEmpId(), employee);
-            return new ResponseEntity<>(emp, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(emp, HttpStatus.OK);
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(new Employee(), HttpStatus.UNAUTHORIZED);
@@ -140,7 +123,7 @@ public class EmployeeController {
     public ResponseEntity<String> forgotEmployeePassword(@RequestBody Employee employee) {
         try {
             if (employeeService.forgotPassword(employee.getEmpEmail()))
-                return new ResponseEntity<>("success", HttpStatus.ACCEPTED);
+                return new ResponseEntity<>("success", HttpStatus.OK);
             return new ResponseEntity<>("fail", HttpStatus.FORBIDDEN);
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());
@@ -156,7 +139,7 @@ public class EmployeeController {
         try {
             authForgotPassword.validateJwtToken(token);
             if (employeeService.resetPassword(authForgotPassword.getEmployeeEmail(token), employee.getEmpPassword()))
-                return new ResponseEntity<>("success", HttpStatus.ACCEPTED);
+                return new ResponseEntity<>("success", HttpStatus.OK);
             return new ResponseEntity<>("fail", HttpStatus.FORBIDDEN);
         } catch (JWTVerificationException e) {
             log.error(e.getMessage());

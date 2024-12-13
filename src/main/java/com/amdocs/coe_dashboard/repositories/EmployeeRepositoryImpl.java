@@ -3,6 +3,7 @@ package com.amdocs.coe_dashboard.repositories;
 import com.amdocs.coe_dashboard.config.CouchbaseConfig;
 import com.amdocs.coe_dashboard.models.Employee;
 import com.amdocs.coe_dashboard.models.EmployeeWrapper;
+import com.amdocs.coe_dashboard.models.RegisterRequestWrapper;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
@@ -63,6 +64,18 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                         QueryOptions.queryOptions().parameters(JsonArray.from(input))
                                 .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
                 .rowsAs(EmployeeWrapper.class).forEach(e -> result.add(e.getEmployee()));
+
+        statement = "SELECT * FROM `"
+                + couchbaseConfig.getBucketName() + "`.`dashboard`.`register_requests` "
+                + "WHERE LOWER(empId) LIKE '%' || LOWER($1) || '%' "
+                + "OR LOWER(empEmail) LIKE '%' || LOWER($1) || '%' "
+                + "OR LOWER(empName) LIKE '%' || LOWER($1) || '%'";
+
+        cluster
+                .query(statement,
+                        QueryOptions.queryOptions().parameters(JsonArray.from(input))
+                                .scanConsistency(QueryScanConsistency.REQUEST_PLUS))
+                .rowsAs(RegisterRequestWrapper.class).forEach(e -> result.add(e.getRegister_requests()));
         result.forEach(e->e.setEmpPassword(null));
         return result;
     }
