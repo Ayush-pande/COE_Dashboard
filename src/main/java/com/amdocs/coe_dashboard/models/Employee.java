@@ -10,6 +10,8 @@ public class Employee {
     private String empImage;
     private String currentAccount;
     private String supervisorName; // Supervisor's name in account
+    private String empRole;
+    private String empDesc;
     private String amdocsExperience; // Amdocs Experience (years or months)
     private String totalExperience; // Total Experience (years or months)
     private String amdocsJourney; // Amdocs Journey (e.g., roles, growth)
@@ -33,7 +35,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String empEmail, String empPassword, String empId, String empName, String empImage, String currentAccount, String supervisorName, String amdocsExperience, String totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, List<String> secondaryTechSkill, List<String> secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, String areaOfCriticalIssue, String productionSupport, int presentationSkills, String hobbiesSports, String additionalInfo, boolean approved) {
+    public Employee(String empEmail, String empPassword, String empId, String empName, String empImage, String currentAccount, String supervisorName, String empRole, String empDesc, String amdocsExperience, String totalExperience, String amdocsJourney, List<String> functionalKnowledge, List<String> primaryTechSkill, List<String> primaryProductSubdomain, List<String> secondaryTechSkill, List<String> secondaryProduct, String devOpsKnowledge, boolean mentoringAbility, boolean explorationInterest, boolean contributedToDesign, boolean engagementActivityContribution, String areaOfCriticalIssue, String productionSupport, int presentationSkills, String hobbiesSports, String additionalInfo, boolean approved) {
         this.empEmail = empEmail;
         this.empPassword = empPassword;
         this.empId = empId;
@@ -41,6 +43,8 @@ public class Employee {
         this.empImage = empImage;
         this.currentAccount = currentAccount;
         this.supervisorName = supervisorName;
+        this.empRole = empRole;
+        this.empDesc = empDesc;
         this.amdocsExperience = amdocsExperience;
         this.totalExperience = totalExperience;
         this.amdocsJourney = amdocsJourney;
@@ -60,6 +64,22 @@ public class Employee {
         this.hobbiesSports = hobbiesSports;
         this.additionalInfo = additionalInfo;
         this.approved = approved;
+    }
+
+    public String getEmpRole() {
+        return empRole;
+    }
+
+    public void setEmpRole(String empRole) {
+        this.empRole = empRole;
+    }
+
+    public String getEmpDesc() {
+        return empDesc;
+    }
+
+    public void setEmpDesc(String empDesc) {
+        this.empDesc = empDesc;
     }
 
     public String getEmpImage() {
